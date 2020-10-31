@@ -14,8 +14,8 @@ matplotlib.use('TkAgg')
 orients = {}
 
 def main():
-	idStart = 15
-	idEnd = 15
+	idStart = 2
+	idEnd = 4
 	counter = 0
 
 	now = datetime.now()
@@ -55,9 +55,10 @@ def main():
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
 	plotline = ax.plot(np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1), 'o-')[0]
-	ax.set_xlim([-1, 1])
-	ax.set_ylim([-1, 1])
-	ax.set_zlim([-1, 1])
+	limit = (idStart - idEnd) + 1
+    ax.set_xlim([-limit, limit])
+	ax.set_ylim([-limit, limit])
+	ax.set_zlim([-limit, limit])
 	ax.set_xlabel("X")
 	ax.set_ylabel("Y")
 	ax.set_zlabel("Z")
