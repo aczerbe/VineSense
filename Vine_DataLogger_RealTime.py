@@ -9,9 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 matplotlib.use('TkAgg')
 
-plt.ion()
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+
 
 orients = {}
 
@@ -53,6 +51,9 @@ def main():
 	print("Compensation data gathered.")
 	input("hit enter to start logging:")
 	print("Starting logging, t=0")
+	plt.ion()
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
 	plotline = ax.plot(np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1), 'o-')[0]
 	ax.set_xlim([-1, 1])
 	ax.set_ylim([-1, 1])
