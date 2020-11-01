@@ -43,7 +43,11 @@ def main():
 	print("Starting logging, t=0")
 	zero = time.time()
 	while True:
-		data = arduino.readline()[:-2].decode("utf-8")	# Read serial data
+		try:
+            data = arduino.readline()[:-2].decode("utf-8")    # Read serial data
+        except:
+            print("bad data packet")
+            continue
 		data = data.split()
 
 		quat = getQuat(data)
