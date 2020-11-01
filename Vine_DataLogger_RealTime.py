@@ -51,11 +51,11 @@ def main():
     print("Compensation data gathered.")
     input("hit enter to start logging:")
     print("Starting logging, t=0")
-    plt.ion()
+    plt.ioff()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plotline = ax.plot(np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1), 'o-')[0]
-    limit = (idStart - idEnd) + 1
+    limit = (idEnd - idStart) + 1
     ax.set_ylim([-limit, limit])
     ax.set_zlim([-limit, limit])
     ax.set_xlim([-limit, limit])
@@ -93,7 +93,8 @@ def main():
 
         positions = [[0, 0, 0]]
         for bandID in range(idStart, idEnd + 1):
-            positions.append([sum(x) for x in zip(positions[bandID-idStart], orients[bandID])])
+            if(bandID in orients):
+                positions.append([sum(x) for x in zip(positions[bandID-idStart], orients[bandID])])
         xs = [row[0] for row in positions]
         ys = [row[1] for row in positions]
         zs = [row[2] for row in positions]
