@@ -26,7 +26,7 @@ def main():
     input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
     print("Gathering compensation data...")
 
-    arduino = serial.Serial('COM13', 115200, timeout=.1)
+    arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
     vector = [1, 0, 0]
     compensators = {}
     ids = [*range(idStart, idEnd+1)]
@@ -51,7 +51,7 @@ def main():
     print("Compensation data gathered.")
     input("hit enter to start logging:")
     print("Starting logging, t=0")
-    plt.ioff()
+    plt.ion()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plotline = ax.plot(np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1), 'o-')[0]
@@ -62,7 +62,7 @@ def main():
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
-    
+
     plt.title("Shape Reconstruction")
     fig.canvas.draw()
     plt.show(block=False)
@@ -89,17 +89,22 @@ def main():
         for i in range(5,len(data)):
             full_str += data[i] + " "
         file.write(full_str + "\n")
-        print(full_str)
-
+        #print(full_str)
+        full = True
+        for i in ids:
+            if i not in orients:
+                full = False
         positions = [[0, 0, 0]]
-        for bandID in range(idStart, idEnd + 1):
-            if(bandID in orients):
+        if full:
+            for bandID in range(idStart, idEnd + 1):
                 positions.append([sum(x) for x in zip(positions[bandID-idStart], orients[bandID])])
+
         xs = [row[0] for row in positions]
         ys = [row[1] for row in positions]
         zs = [row[2] for row in positions]
+        #print(positions)
         counter += 1
-        if(counter % 10 == 0):
+        if(counter % 50 == 0):
             plotline.set_xdata(xs)
             plotline.set_ydata(ys)
             plotline.set_3d_properties(zs)
