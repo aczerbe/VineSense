@@ -122,6 +122,7 @@ def main():
             plotline.set_xdata(xs)
             plotline.set_ydata(ys)
             plotline.set_3d_properties(zs)
+            fig.suptitle("t=" + "{:.4f}".format(time.time() - zero))
             ax.draw_artist(plotline)
             fig.canvas.flush_events()
         #time.sleep(0.01)

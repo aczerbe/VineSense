@@ -55,7 +55,7 @@ def main():
 	print("Starting logging, t=0")
 	file = open(filename, "w+")
 	plt.ion()
-	fig, (ax1, ax2) = plt.subplots(1, 2)
+	fig, (ax1, ax2) = plt.subplots(2, 1)
 	ax3 = ax2.twinx()
 	#ax.set_aspect('equal')
 	#ax.auto_scale_xyz([-limit, limit], [-limit, limit], [-limit, limit])
