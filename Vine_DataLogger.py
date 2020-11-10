@@ -44,10 +44,10 @@ def main():
 	zero = time.time()
 	while True:
 		try:
-            data = arduino.readline()[:-2].decode("utf-8")    # Read serial data
-        except:
-            print("bad data packet")
-            continue
+			data = arduino.readline()[:-2].decode("utf-8")    # Read serial data
+		except:
+			print("bad data packet")
+			continue
 		data = data.split()
 
 		quat = getQuat(data)
@@ -73,4 +73,4 @@ def getQuat(data):
 
 
 if __name__ == "__main__":
-    main()
+	main()

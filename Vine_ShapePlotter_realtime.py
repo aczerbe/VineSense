@@ -11,8 +11,8 @@ plt.ion()
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-idStart = 15
-idEnd = 15
+idStart = 2
+idEnd = 2
 
 
 ids = [*range(idStart, idEnd+1)]
@@ -27,11 +27,12 @@ sht31 = {}
 
 filename = sys.argv[1]# 'data_23_10_2020_19_39_26.csv'
 def main():
-	timeStart = 1.0
+	limit = len(ids)
+	timeStart = 10.0
 	plotline = ax.plot(np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1),np.zeros(idEnd-idStart + 1), 'o-')[0]
-	ax.set_xlim([-1, 1])
-	ax.set_ylim([-1, 1])
-	ax.set_zlim([-1, 1])
+	ax.set_xlim([-limit, limit])
+	ax.set_ylim([-limit, limit])
+	ax.set_zlim([-limit, limit])
 	ax.set_xlabel("X")
 	ax.set_ylabel("Y")
 	ax.set_zlabel("Z")
@@ -57,7 +58,6 @@ def main():
 					full = False
 			if full:
 				positions = [[0, 0, 0]]
-
 				for bandID in range(idStart, idEnd + 1):
 					positions.append([sum(x) for x in zip(positions[bandID-idStart], orients[bandID])])
 				xs = [row[0] for row in positions]

@@ -7,10 +7,10 @@ import sys
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-idStart = 15
-idEnd = 15
+idStart = 2
+idEnd = 2
 
-timeStart = 1.0
+timeStart = 40
 
 ids = [*range(idStart, idEnd+1)]
 
@@ -56,6 +56,12 @@ def main():
 	print(sht31)
 	ax.plot(xs,ys,zs, 'o-')
 	plt.title("shape")
+	ax.set_xlim([-limit, limit])
+	ax.set_ylim([-limit, limit])
+	ax.set_zlim([-limit, limit])
+	ax.set_xlabel("X")
+	ax.set_ylabel("Y")
+	ax.set_zlabel("Z")
 	plt.figure()
 	plt.scatter(ids,accels)
 	plt.title("Jerk")
@@ -74,7 +80,7 @@ def main():
 
 def therm_to_temp(therm):
 	r = 10* therm/ (1024 - therm) # convert to r in kOhms
-	kelvin = 1/ (1/298.15 + 1/3418 * np.log(r/10))
+	kelvin = 1/ (1/298.15 + 1/3380 * np.log(r/10))
 	temp = kelvin - 273.15
 	return temp
 
