@@ -89,9 +89,7 @@ def main():
 		rot_q = R.from_quat(quat)
 		bandID = int(data[0])
 		thiscomp = compensators[bandID]
-		#pos1 = thiscomp.apply(rot_q.apply(vector), inverse=True)
-		pos = thiscomp.apply(rot_q.apply(thiscomp.apply(vector)), inverse=True)
-		#pos_no = rot_q.apply(vector)
+		pos = thiscomp.apply(rot_q.apply(vector), inverse=True)
 		orients[bandID] = pos
 		therms[bandID] = [int(x) for x in data[8:12]]
 		accel[bandID] = accel_to_jerk(float(data[5]))
