@@ -44,7 +44,7 @@ def main():
 		bandId = int(data[0])
 		quat = getQuat(data)
 		rotation_compensator = R.from_quat(quat)
-		compensators[bandId] = rotation_compensator
+		compensators[bandID] = rotation_compensator
 		compensated = True
 		for i in ids:
 			if i not in compensators:
