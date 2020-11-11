@@ -7,12 +7,9 @@ import sys
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-idStart = 2
-idEnd = 2
+timeStart = 170
 
-timeStart = 40
-
-ids = [*range(idStart, idEnd+1)]
+ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
 
 orients = {}
 therms = {}
@@ -38,9 +35,10 @@ def main():
 			if full:
 				break
 	positions = [[0, 0, 0]]
-
-	for bandID in range(idStart, idEnd + 1):
-		positions.append([sum(x) for x in zip(positions[bandID-idStart], orients[bandID])])
+	k=0
+	for bandID in ids:
+        	k += 1
+        	positions.append([sum(x) for x in zip(positions[k-1], orients[bandID])])
 	xs = [row[0] for row in positions]
 	ys = [row[1] for row in positions]
 	zs = [row[2] for row in positions]
@@ -54,6 +52,7 @@ def main():
 	print(temps)
 	print(accel)
 	print(sht31)
+	limit = len(ids)
 	ax.plot(xs,ys,zs, 'o-')
 	plt.title("shape")
 	ax.set_xlim([-limit, limit])

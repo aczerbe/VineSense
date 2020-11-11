@@ -26,10 +26,10 @@ def main():
     input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
     print("Gathering compensation data...")
 
-    arduino = serial.Serial('/dev/tty.usbmodem82406201', 115200, timeout=.1)
+    arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
     vector = [1, 0, 0]
     compensators = {}
-    ids = [15]
+    ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
 
     compensated = False
 
@@ -39,7 +39,7 @@ def main():
         if len(data) != 12: # Bad serial read, skip to next line
             continue
         print(rawdata)
-        bandId = int(data[0])
+        bandID = int(data[0])
         quat = getQuat(data)
         rotation_compensator = R.from_quat(quat)
         compensators[bandID] = rotation_compensator
@@ -53,7 +53,7 @@ def main():
     print("Starting logging, t=0")
     file = open(filename, "w+")
     plt.ion()
-    fig = plt.figure(figsize=plt.figaspect(1.0))
+    fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plotline = ax.plot(np.zeros(len(ids)),np.zeros(len(ids)),np.zeros(len(ids)), 'o-')[0]
     #plotline2 = ax.plot(np.zeros(len(ids)),np.zeros(len(ids)),np.zeros(len(ids)), 'o-')[0]
@@ -89,7 +89,7 @@ def main():
         quat = getQuat(data)
         rot_q = R.from_quat(quat)
         bandID = int(data[0])
-        thiscomp = compensators[bandId]
+        thiscomp = compensators[bandID]
         pos1 = thiscomp.apply(rot_q.apply(vector), inverse=True)
         pos = thiscomp.apply(rot_q.apply(thiscomp.apply(vector)), inverse=True)
         pos_no = rot_q.apply(vector)
