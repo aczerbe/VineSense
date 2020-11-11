@@ -28,10 +28,10 @@ def main():
 	input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
 	print("Gathering compensation data...")
 
-	arduino = serial.Serial('/dev/tty.usbmodem82406201', 115200, timeout=.1)
+	arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
 	vector = [1, 0, 0]
 	compensators = {}
-	ids = [15]
+	ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
 
 	compensated = False
 
@@ -65,7 +65,8 @@ def main():
 	jerk = ax.scatter(ids, [0]*len(ids))
 	ax.set_title("Jerk values")
 	ax.set_ylim(0,100)
-	
+	ax.set_xlim(-1,len(ids))
+
 	#plt.title("Temp sensor data, t=0", loc='center')
 	zero = time.time()
 
@@ -104,7 +105,7 @@ def main():
 		#print(full_str)
 		counter += 1
 		if(counter % 2 == 0):
-			jerk.set_offsets([[id,accel[id]] for id in ids])
+			jerk.set_offsets([[ids.index(id),accel[id]] for id in ids])
 			fig.suptitle("Jerk data, t=" + "{:.4f}".format(time.time() - zero))
 			fig.canvas.flush_events()
 
