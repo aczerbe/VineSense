@@ -21,18 +21,18 @@ def main():
     now = datetime.now()
     filename = now.strftime("data_%d_%m_%Y_%H_%M_%S.csv")
     
-
+    arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
     print("Vine Data Logger V1")
     input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
     print("Gathering compensation data...")
 
-    arduino = serial.Serial('/dev/tty.usbmodem82406201', 115200, timeout=.1)
+    
     vector = [1, 0, 0]
     compensators = {}
-    ids = [15]
-#    ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
+    #ids = [15]
+    ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
 
-    compensated = False
+    compensated = True
 
     while not compensated:
         rawdata = arduino.readline()[:-2].decode("utf-8")    # Read serial data
@@ -88,8 +88,10 @@ def main():
         quat = getQuat(data)
         rot_q = R.from_quat(quat)
         bandID = int(data[0])
-        thiscomp = compensators[bandID]
-        pos = thiscomp.apply(rot_q.apply(vector), inverse=True)
+        #thiscomp = compensators[bandID]
+        #print(thiscomp)
+        #pos = thiscomp.apply(rot_q.apply(vector), inverse=True)
+        pos = rot_q.apply(vector)
         orients[bandID] = pos
         pos_str = ""
         for i in range(0,len(pos)):
@@ -113,14 +115,14 @@ def main():
         xs = [row[0] for row in positions]
         ys = [row[1] for row in positions]
        # zs = [row[2] for row in positions]
-        #print(positions)
+        print(positions)
         counter += 1
-        if(counter % 50 == 0):
+        if(counter % 5 == 0):
             plotline.set_xdata(xs)
             plotline.set_ydata(ys)
             #plotline.set_3d_properties(zs)
-            fig.suptitle("t=" + "{:.4f}".format(time.time() - zero))
-            ax.draw_artist(plotline)
+            #fig.suptitle("t=" + "{:.4f}".format(time.time() - zero))
+            #ax.draw_artist(plotline)
             fig.canvas.flush_events()
         #time.sleep(0.01)
 
