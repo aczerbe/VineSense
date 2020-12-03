@@ -7,9 +7,10 @@ import sys
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-timeStart = 170
+timeStart = 465.0
 
-ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
+ids = [20, 19, 18, 17, 16, 15, 13, 21, 10, 9, 8, 7, 6, 5, 2]
+ids = [13, 21, 10, 9, 8, 7, 6, 5, 2]
 
 orients = {}
 therms = {}
@@ -47,6 +48,10 @@ def main():
 	accels = [accel[x] for x in ids]
 	#thermtemps = [[therm_to_temp(t) for t in therms[x]] for x in ids]
 	thermtemps = [[therm_to_temp(therms[x][t]) for x in ids] for t in range(4)]
+	#real:
+	#thermtemps = [[520, 521, 522, 521, 519, 518, 527, 526, 520, 515, 526, 522, 525, 515, 497], [508, 503, 505, 502, 500, 500, 530, 522, 510, 508, 528, 520, 531, 504, 495], [501, 501, 499, 499, 496, 496, 522, 684, 515, 509, 527, 524, 609, 508, 501], [493, 490, 488, 490, 488, 488, 524, 676, 504, 497, 503, 501, 528, 498, 491]]
+	#just trial 1 with other values screwed for it:
+	thermtemps = [[520, 521, 522, 521, 519, 518, 500, 500, 500, 500, 500, 500, 500, 500, 497], [508, 503, 505, 502, 500, 500, 500, 500, 510, 508, 500, 500, 500, 504, 540], [501, 501, 499, 499, 496, 496, 500, 500, 515, 509, 500, 500, 500, 508, 501], [493, 490, 488, 490, 488, 488, 500, 500, 504, 497, 503, 501, 500, 498, 491]]
 	print(xs)
 	print(positions)
 	print(temps)
@@ -62,26 +67,47 @@ def main():
 	ax.set_ylabel("Y")
 	ax.set_zlabel("Z")
 	plt.figure()
-	plt.scatter(ids,accels)
-	plt.title("Jerk")
-	plt.figure()
-	plt.scatter(ids,temps, label="digital")
-	plt.scatter(ids, thermtemps[0], label="therm0")
-	plt.scatter(ids, thermtemps[1], label="therm1")
-	plt.scatter(ids, thermtemps[2], label="therm2")
-	plt.scatter(ids, thermtemps[3], label="therm3")
-	plt.title("temperatures")
-	plt.legend()
-	plt.figure()
-	plt.scatter(ids, humids)
-	plt.title("humidity")
+	#plt.scatter(ids,accels)
+	#plt.title("Jerk")
+	#plt.figure()
+	#plt.scatter(ids,temps, label="digital")
+	#plt.scatter([ids.index(id) for id in ids], thermtemps[0], label="therm0")
+	#plt.scatter([ids.index(id) for id in ids], thermtemps[1], label="therm1")
+	#plt.scatter([ids.index(id) for id in ids], thermtemps[2], label="therm2")
+	#plt.scatter([ids.index(id) for id in ids], thermtemps[3], label="therm3")
+	#plt.title("temperatures")
+	#plt.legend()
+	#plt.figure()
+	#plt.scatter(ids, humids)
+	#plt.title("humidity")
+
+	#fig, (ax1, ax2) = plt.subplots(2, 1,figsize=(10.9,3.2))
+
+	#fig.subplots_adjust(hspace=0.05)
+	#thermtemps = np.array(thermtemps)
+	#ax1.imshow(thermtemps[:,0:15], cmap="hot", aspect="auto",interpolation="none")
+	#print(thermtemps)
+	
+	#ax1.set_ylim(-0.5,3.5)
+	#ax2.scatter([ids.index(id) for id in ids], humids)
+	#ax2.set_ylim(0,100)
+	#ax1.set_xticks([])
+	#ax1.set_yticks([0,1,2,3])
+	#ax1.set_xlim(-0.5,14.5)
+	#ax2.set_xlim(-0.5,14.5)
+	#ax2.set_xlabel("Band #",labelpad=0)
+	##x1.set_xlabel("Band #")
+	#ax1.set_ylabel("Thermistor #",labelpad=18)
+	#ax1.set_title("Pipe Leak Measurement")
+	#ax2.set_ylabel("Humidity (%)")
+
 	plt.show()
 
 def therm_to_temp(therm):
 	r = 10* therm/ (1024 - therm) # convert to r in kOhms
 	kelvin = 1/ (1/298.15 + 1/3380 * np.log(r/10))
 	temp = kelvin - 273.15
-	return temp
+	return therm
 
 
 if __name__ == "__main__":

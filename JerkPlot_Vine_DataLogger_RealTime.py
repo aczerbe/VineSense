@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import math
 
-matplotlib.use('qt4Agg')
+matplotlib.use('TkAgg')
 
 
 orients = {}
@@ -29,10 +29,11 @@ def main():
     input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
     print("Gathering compensation data...")
 
-    arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
+    arduino = serial.Serial('/dev/tty.usbmodem82406201', 115200, timeout=.1) #3901
     vector = [1, 0, 0]
     compensators = {}
-    ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
+    #ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
+    ids = [15]
 
     compensated = False
 
@@ -66,7 +67,7 @@ def main():
     jerk = ax.scatter(ids, [0.1]*len(ids))
     ax.set_title("Jerk values")
     #plt.yscale('log')
-    ax.set_ylim(0,100)
+    ax.set_ylim(0,50)
     ax.set_xlim(-1,len(ids))
 
     #plt.title("Temp sensor data, t=0", loc='center')
@@ -112,12 +113,11 @@ def main():
         counter += 1
         if full:
             if(counter % 10 == 0):
-                #print("starting")
-                jerk.set_offsets([[ids.index(id),accel[id]] for id in ids])
+                jerk.set_offsets([[ids.index(id),accel_to_jerk(accel[id])] for id in ids])
                 fig.suptitle("Jerk data, t=" + "{:.4f}".format(time.time() - zero))
                 fig.canvas.flush_events()
                 counter = 0
-                #print("ending")
+                print(accel[15])
 
 
 def getQuat(data):
@@ -131,7 +131,7 @@ def therm_to_temp(therm):
     return temp
 
 def accel_to_jerk(accel):
-    return accel/0.10
+    return math.pow(accel/.5,1.5)
 
 if __name__ == "__main__":
     main()

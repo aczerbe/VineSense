@@ -26,10 +26,11 @@ def main():
     input("Please calibrate IMUs for each band (indicator LED should be fully off), orient all bands in X-axis line, and then hit enter: ")
     print("Gathering compensation data...")
 
-    arduino = serial.Serial('/dev/tty.usbmodem82403901', 115200, timeout=.1)
+    arduino = serial.Serial('/dev/tty.usbmodem82406201', 115200, timeout=.1)
     vector = [1, 0, 0]
     compensators = {}
     ids = [21, 20, 19, 18, 17, 16, 15, 13, 12, 10, 9, 8, 7, 6, 5, 2]
+    ids = [22, 20, 19, 18, 17, 16, 13, 21, 10, 9, 8, 7, 6, 5, 2]
 
     compensated = False
 
@@ -40,6 +41,8 @@ def main():
             continue
         print(rawdata)
         bandID = int(data[0])
+        if(bandID not in ids):
+            continue
         quat = getQuat(data)
         rotation_compensator = R.from_quat(quat)
         compensators[bandID] = rotation_compensator
@@ -85,12 +88,14 @@ def main():
         	except:
         		print("empty packet")
         	continue
-
+        bandID = int(data[0])
+        if(bandID not in ids):
+            continue
         quat = getQuat(data)
         rot_q = R.from_quat(quat)
-        bandID = int(data[0])
         thiscomp = compensators[bandID]
         pos = thiscomp.apply(rot_q.apply(vector), inverse=True)
+        pos = rot_q.apply(vector)
         orients[bandID] = pos
         pos_str = ""
         for i in range(0,len(pos)):
@@ -116,12 +121,12 @@ def main():
         zs = [row[2] for row in positions]
         #print(positions)
         counter += 1
-        if(counter % 50 == 0):
+        if(counter % 30 == 0):
             plotline.set_xdata(xs)
             plotline.set_ydata(ys)
             plotline.set_3d_properties(zs)
-            fig.suptitle("t=" + "{:.4f}".format(time.time() - zero))
-            ax.draw_artist(plotline)
+            #fig.suptitle("t=" + "{:.4f}".format(time.time() - zero))
+            #ax.draw_artist(plotline)
             fig.canvas.flush_events()
         #time.sleep(0.01)
 
